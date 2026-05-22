@@ -1,0 +1,86 @@
+# =========================================
+# Sistema de Alarme
+# Expressão:
+# S = C(A + B)
+#
+# +  = OR
+# () = prioridade
+# multiplicação = AND
+#
+# Logo:
+# S = C AND (A OR B)
+# =========================================
+
+.data
+msgA: .asciiz "Digite o valor de A (0 ou 1): "
+msgB: .asciiz "Digite o valor de B (0 ou 1): "
+msgC: .asciiz "Digite o valor de C (0 ou 1): "
+resultado: .asciiz "\nResultado do alarme S = "
+
+.text
+.globl main
+
+main:
+
+    # =========================
+    # Leitura de A
+    # =========================
+    li $v0, 4
+    la $a0, msgA
+    syscall
+
+    li $v0, 5
+    syscall
+    move $t0, $v0       # A -> $t0
+
+    # =========================
+    # Leitura de B
+    # =========================
+    li $v0, 4
+    la $a0, msgB
+    syscall
+
+    li $v0, 5
+    syscall
+    move $t1, $v0       # B -> $t1
+
+    # =========================
+    # Leitura de C
+    # =========================
+    li $v0, 4
+    la $a0, msgC
+    syscall
+
+    li $v0, 5
+    syscall
+    move $t2, $v0       # C -> $t2
+
+    # =========================
+    # (A OR B)
+    # =========================
+    or $t3, $t0, $t1
+
+    # =========================
+    # C AND (A OR B)
+    # =========================
+    and $t4, $t2, $t3
+
+    # =========================
+    # Exibe mensagem
+    # =========================
+    li $v0, 4
+    la $a0, resultado
+    syscall
+
+    # =========================
+    # Exibe resultado S
+    # =========================
+    li $v0, 1
+    move $a0, $t4
+    syscall
+
+    # =========================
+    # Encerrar programa
+    # =========================
+    li $v0, 10
+    syscall
